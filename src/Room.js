@@ -20,7 +20,7 @@ class Room extends Component {
           NewMessage:null,
           MyNotes: []
 		};
-    this.socket = io("http://localhost:5000");
+    this.socket = io("https://my-meet-app.herokuapp.com/");
     this.MyName = localStorage.getItem('meetapp-username');
     this.roomId = this.props.match.params.id;
     this.MyDbId = localStorage.getItem('meetapp-dbId');

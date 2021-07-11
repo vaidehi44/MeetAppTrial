@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import './session.css'
 import 'bootstrap/dist/css/bootstrap.css';
 
-const apiUrl = "http://localhost:5000/api/sessions-info";
+const apiUrl = "https://my-meet-app.herokuapp.com/api/sessions-info";
 
 
 const showChats = (array) => {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Navbar from './Navbar';
 
-const apiUrl = "http://localhost:5000/api/register";
+const apiUrl = "https://my-meet-app.herokuapp.com/api/register";
 
 export default class Register extends Component {
 

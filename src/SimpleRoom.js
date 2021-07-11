@@ -19,7 +19,7 @@ class SimpleRoom extends Component {
           NewMessage: null,
           MyNotes: ""
 		};
-    this.socket = io("http://localhost:5000");
+    this.socket = io("https://my-meet-app.herokuapp.com/");
     this.roomId = this.props.match.params.id;
     this.MyName = this.props.match.params.name;
     this.initialVideo = this.props.match.params.video;
