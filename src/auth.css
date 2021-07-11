@@ -1,0 +1,27 @@
+.form-wrapper {
+    display: block;
+    width: 350px;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+    border: 1px solid rgb(134, 132, 132);
+}
+
+.form-wrapper .appTitle {
+    text-align: center;
+    padding: 20px;
+}
+
+.auth-form {
+    text-align: center;
+}
+.auth-form input {
+    display: block;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 30px;
+    outline: none;
+    margin-bottom: 35px;
+}

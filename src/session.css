@@ -1,0 +1,39 @@
+
+
+.accordion-container {
+    margin:20px;
+}
+
+.accordion {
+    width:75%;
+}
+
+.chat-notes-container .chats, .notes{
+    margin:20px;
+    padding:10px;
+    width:38%;
+    height:300px;
+    background-color: rgb(210, 243, 235);
+    border: 1px solid rgb(99, 98, 98);
+    border-radius: 5px;
+    overflow-y: scroll;
+}
+
+.chat-mssg-block {
+    list-style-type: none;
+    background-color: rgb(183, 199, 202);
+    border-radius: 5px;
+    padding: 10px;
+    padding-top:6px;
+    margin: 8px;
+    margin-left: -20px;
+    min-width:100px;
+    width: fit-content;
+    overflow-wrap: break-word;
+}
+
+.chat-mssg-block .author {
+    text-align: right;
+    font-size: 12px;
+    font-weight: 500;
+}

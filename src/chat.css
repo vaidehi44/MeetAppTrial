@@ -1,0 +1,29 @@
+.chat_form .chat_log {
+    width: 100%;
+    height: 42vh;
+    overflow-y: auto;
+    background-color: rgb(216, 218, 219);
+    transition: height 0.7s;
+}
+
+.chat_form .chat_log.expand {
+    height: 75vh;
+}
+
+.chat_form .chat_log .chat-mssg-item {
+    list-style-type: none;
+    background-color: rgb(183, 199, 202);
+    border-radius: 5px;
+    padding: 10px;
+    padding-top:6px;
+    margin: 8px;
+    min-width:100px;
+    width: fit-content;
+    overflow-wrap: break-word;
+}
+
+.chat_form .chat_log .chat-mssg-item .author {
+    text-align: right;
+    font-size: 14px;
+    font-weight: 500;
+}

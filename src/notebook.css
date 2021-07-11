@@ -1,0 +1,13 @@
+
+.notes_page{
+    width: 90%;
+    height: 48vh;
+    background-color: rgb(231, 246, 247);
+    white-space: pre-wrap;
+    white-space: pre-line;
+    transition: height 0.7s;
+}
+
+.notes_page.expand{
+    height: 80vh;
+}
