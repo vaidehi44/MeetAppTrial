@@ -40,6 +40,11 @@ class SimpleRoom extends Component {
       this.AcceptConnection();
     });
 
+    this.state.MyPeer.on('error', (err) => {
+      console.log('peer connection error', err);
+      this.state.MyPeer.reconnect();
+    });
+
     this.getMyStream();
 
     this.socket.on("all-users", (array) => {
@@ -111,6 +116,7 @@ class SimpleRoom extends Component {
   MakeConnection = (id) => {
     console.log("make conn", id);
     var call = this.state.MyPeer.call(id, this.state.MyStream, {metadata: { "type" : "camera"}});
+    console.log("call", call)
     call.on("stream", (stream) => {
       if (!this.state.Streams.includes(stream.id)) {
         this.setState({ Streams: [...this.state.Streams, stream.id]})
@@ -123,8 +129,10 @@ class SimpleRoom extends Component {
   AcceptConnection = () => {
     console.log("enter accept conn");
     this.state.MyPeer.on("call", (call) => {
+      console.log("someone has called");
+
       if (call.metadata.type==="camera") {
-        console.log("enter metadat camera");
+        console.log("enter metadata camera");
         call.answer(this.state.MyStream);
         call.on("stream", (stream) => {
           if (!this.state.Streams.includes(stream.id)) {
