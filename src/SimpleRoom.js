@@ -30,6 +30,33 @@ class SimpleRoom extends Component {
     this.initialAudio = this.props.match.params.audio;
     this.sessionTitle = this.props.match.params.session;
 
+    this.config = {'iceServers': [
+      {url:'stun:stun01.sipphone.com'},
+      {url:'stun:stun.ekiga.net'},
+      {url:'stun:stun.fwdnet.net'},
+      {url:'stun:stun.ideasip.com'},
+      {url:'stun:stun.iptel.org'},
+      {url:'stun:stun.rixtelecom.se'},
+      {url:'stun:stun.schlund.de'},
+      {url:'stun:stun.l.google.com:19302'},
+      {url:'stun:stun1.l.google.com:19302'},
+      {url:'stun:stun2.l.google.com:19302'},
+      {url:'stun:stun3.l.google.com:19302'},
+      {url:'stun:stun4.l.google.com:19302'},
+      {url:'stun:stunserver.org'},
+      {url:'stun:stun.softjoys.com'},
+      {url:'stun:stun.voiparound.com'},
+      {url:'stun:stun.voipbuster.com'},
+      {url:'stun:stun.voipstunt.com'},
+      {url:'stun:stun.voxgratia.org'},
+      {url:'stun:stun.xten.com'},
+
+      {
+        url: 'turn:numb.viagenie.ca',
+        credential: 'Pass@123',
+        username: 'vaidehiatpadkar1@gmail.com'
+        }
+    ]}
 	};
 
   componentDidMount() {
@@ -38,7 +65,7 @@ class SimpleRoom extends Component {
       console.log("soc id", this.socket.id);
       this.setState({ MyId: this.socket.id});
       console.log('my id', this.state.MyId);
-      this.setState({MyPeer: new Peer(this.socket.id, { host: "my-meet-app.herokuapp.com", port: 9000, debug: 3 })});
+      this.setState({MyPeer: new Peer(this.socket.id, { key:'peerjs', host: "my-meet-app.herokuapp.com", port: 443, path: '/', secure: true, debug: 3 })});
       //console.log('peer - ',this.state.MyPeer.id); --gives error
       this.socket.emit("join-room", { roomId: roomId, userName: this.MyName, userId: this.socket.id} ); 
       this.getAllUsers(roomId);
@@ -46,6 +73,7 @@ class SimpleRoom extends Component {
     });
 
     if (this.state.MyPeer!==null) {
+      console.log("mypeer", this.state.MyPeer);
       this.state.MyPeer.on('error', (err) => {
         console.log('peer connection error', err);
         this.state.MyPeer.reconnect();
@@ -104,6 +132,7 @@ class SimpleRoom extends Component {
       };
 
       setInitialStream(this.initialVideo, this.initialAudio);
+      this.AcceptConnection();
     })
     .catch(error => {
       console.error('Error accessing media devices.', error);
@@ -122,34 +151,43 @@ class SimpleRoom extends Component {
 
   MakeConnection = (id) => {
     console.log("make conn", id);
-    var call = this.state.MyPeer.call(id, this.state.MyStream, {metadata: { "type" : "camera"}});
-    console.log("call", call)
-    call.on("stream", (stream) => {
-      if (!this.state.Streams.includes(stream.id)) {
-        this.setState({ Streams: [...this.state.Streams, stream.id]})
-        this.addMemberVideo(stream, call.peer);
-        console.log("add member vid called", id);
-      }
-    })
+    if (this.state.MyPeer!==null){
+      var call = this.state.MyPeer.call(id, this.state.MyStream, {metadata: { "type" : "camera"}});
+      console.log("call", call)
+      call.on("stream", (stream) => {
+        if (!this.state.Streams.includes(stream.id)) {
+          this.setState({ Streams: [...this.state.Streams, stream.id]})
+          this.addMemberVideo(stream, call.peer);
+          console.log("add member vid called", id);
+        }
+      })
+    } else {
+        this.MakeConnection();
+    }
+    
   };
 
   AcceptConnection = () => {
     console.log("enter accept conn", this.state.MyPeer);
-    this.state.MyPeer.on("call", (call) => {
-      console.log("someone has called");
-
-      if (call.metadata.type==="camera") {
-        console.log("enter metadata camera");
-        call.answer(this.state.MyStream);
-        call.on("stream", (stream) => {
-          if (!this.state.Streams.includes(stream.id)) {
-            this.setState({ Streams: [...this.state.Streams, stream.id]})
-            this.addMemberVideo(stream, call.peer);
-            console.log("accepted connection");
-            }
-          })
-        } 
-      })    
+    if (this.state.MyPeer!==null) {
+      this.state.MyPeer.on("call", (call) => {
+        console.log("someone has called", call);
+  
+        if (call.metadata.type==="camera") {
+          console.log("enter metadata camera");
+          call.answer(this.state.MyStream);
+          call.on("stream", (stream) => {
+            if (!this.state.Streams.includes(stream.id)) {
+              this.setState({ Streams: [...this.state.Streams, stream.id]})
+              this.addMemberVideo(stream, call.peer);
+              console.log("accepted connection");
+              }
+            })
+          } 
+        })  
+    } else {
+      return this.AcceptConnection();
+    }
     };
 
   addMyVideo = (stream) => {
