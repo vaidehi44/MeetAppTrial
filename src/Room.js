@@ -35,7 +35,7 @@ class Room extends Component {
       this.setState({ MyId: this.socket.id});
       console.log('my id', this.state.MyId);
       this.setState({MyPeer: new Peer(this.socket.id, { secure: true, host: "https://my-meet-app.herokuapp.com/"})});
-      console.log('peer - ',this.state.MyPeer.id);
+      console.log('peer - ',this.state.MyPeer);
       this.socket.emit("join-room", { roomId: roomId, userName: this.MyName, userId: this.socket.id} ); 
       this.getAllUsers(roomId);
       this.AcceptConnection();
