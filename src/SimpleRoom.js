@@ -31,6 +31,7 @@ class SimpleRoom extends Component {
   componentDidMount() {
     const roomId = this.roomId;
     this.socket.on("connect", () => {
+      console.log("soc id", this.socket.id);
       this.setState({ MyId: this.socket.id});
       console.log('my id', this.state.MyId);
       this.setState({MyPeer: new Peer(this.socket.id, { host: "my-meet-app.herokuapp.com", secure: true, port: 9000, debug: 3 })});
