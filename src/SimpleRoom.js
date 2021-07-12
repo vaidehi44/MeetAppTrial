@@ -67,11 +67,12 @@ class SimpleRoom extends Component {
       console.log('my id', this.state.MyId);
       this.setState({MyPeer: new Peer(this.socket.id, { host: "my-meet-app.herokuapp.com", port: 443, secure: true, debug: 3, 
           config: {'iceServers': [
-              { url: 'stun:stun.l.google.com:19302' },
-              { url: 'turn:numb.viagenie.ca:3478', credential: 'muazkh', username:'webrtc@live.com' },
-              { url: 'turn:numb.viagenie.ca', credential: 'muazkh', username:'webrtc@live.com' },
-              { url: 'turn:192.158.29.39:3478?transport=udp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username:'28224511:1379330808' },
-              { url: 'turn:192.158.29.39:3478?transport=tcp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username:'28224511:1379330808' }
+              { 'urls': 'stun:stun.l.google.com:19302' },
+              { 'urls': 'turn:numb.viagenie.ca:3478', credential: 'muazkh', username:'webrtc@live.com' },
+              { 'urls': 'turn:numb.viagenie.ca', credential: 'muazkh', username:'webrtc@live.com' },
+              { 'urls': 'turn:192.158.29.39:3478?transport=udp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username:'28224511:1379330808' },
+              { 'urls': 'turn:192.158.29.39:3478?transport=tcp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username:'28224511:1379330808' },
+              { 'urls': ["turn:13.250.13.83:3478?transport=udp"],"username": "YzYNCouZM1mhqhmseWk6","credential": "YzYNCouZM1mhqhmseWk6"}
             ]
           } })});
       //console.log('peer - ',this.state.MyPeer.id); --gives error
