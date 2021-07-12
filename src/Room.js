@@ -116,6 +116,7 @@ class Room extends Component {
 
   MakeConnection = (id) => {
     var call = this.state.MyPeer.call(id, this.state.MyStream, {metadata: { "type" : "camera"}});
+    console.log("make conn, id=", id," call = ", call)
     call.on("stream", (stream) => {
       if (!this.state.Streams.includes(stream.id)) {
         this.setState({ Streams: [...this.state.Streams, stream.id]})
