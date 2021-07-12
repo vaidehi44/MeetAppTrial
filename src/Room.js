@@ -69,6 +69,11 @@ class Room extends Component {
       this.AcceptConnection();
     });
 
+    this.state.MyPeer.on('error', (err) => {
+      console.log('peer connection error', err);
+      this.state.MyPeer.reconnect();
+    });
+
     this.getMyStream();
 
     this.socket.on("all-users", (array) => {
