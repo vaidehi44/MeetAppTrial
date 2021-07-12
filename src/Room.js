@@ -301,7 +301,7 @@ class Room extends Component {
   acceptScreen = () => {
     if (this.state.MyPeer !== null) {
       this.state.MyPeer.on("call", (call) => {
-        if (call.metadata.type=="screenShare") {
+        if (call.metadata.type==="screenShare") {
           call.answer();
           call.on("stream", (stream => {
           if (!this.state.Streams.includes(stream.id)) {

@@ -38,7 +38,7 @@ class SimpleRoom extends Component {
       console.log("soc id", this.socket.id);
       this.setState({ MyId: this.socket.id});
       console.log('my id', this.state.MyId);
-      this.setState({MyPeer: new Peer(this.socket.id, { host: "my-meet-app.herokuapp.com", secure: true, port: 9000, debug: 3 })});
+      this.setState({MyPeer: new Peer(this.socket.id, { host: "my-meet-app.herokuapp.com", port: 9000, debug: 3 })});
       //console.log('peer - ',this.state.MyPeer.id); --gives error
       this.socket.emit("join-room", { roomId: roomId, userName: this.MyName, userId: this.socket.id} ); 
       this.getAllUsers(roomId);
@@ -266,7 +266,7 @@ class SimpleRoom extends Component {
   acceptScreen = () => {
     if (this.state.MyPeer !== null) {
       this.state.MyPeer.on("call", (call) => {
-        if (call.metadata.type=="screenShare") {
+        if (call.metadata.type==="screenShare") {
           call.answer();
           call.on("stream", (stream => {
           if (!this.state.Streams.includes(stream.id)) {
@@ -373,7 +373,7 @@ class SimpleRoom extends Component {
                 <div class="tab-content" id="pills-tabContent">
                   <div class="tab-pane fade show active" id="pills-participants" role="tabpanel" aria-labelledby="pills-participants-tab"> 
                     <div className="membersContainer" id="membersContainer">
-                      { Users.map(user => <div className='member_name'>{user.userName}<br></br></div>)}
+                      { Users.map((user, index) => <div key={index} className='member_name'>{user.userName}<br></br></div>)}
                     </div>
                   </div>
                   <div class="tab-pane fade" id="pills-chat" role="tabpanel" aria-labelledby="pills-chat-tab">
