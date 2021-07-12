@@ -6,6 +6,10 @@ import Peer from 'peerjs';
 import 'bootstrap/dist/css/bootstrap.css';
 import "./room.css";
 
+const real = "https://my-meet-app.herokuapp.com/";
+const local = "http://localhost:5000";
+
+
 class SimpleRoom extends Component {
   constructor(props) {
 		super(props);
