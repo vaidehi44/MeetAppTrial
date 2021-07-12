@@ -134,7 +134,7 @@ class SimpleRoom extends Component {
   };
 
   AcceptConnection = () => {
-    console.log("enter accept conn");
+    console.log("enter accept conn", this.state.MyPeer);
     this.state.MyPeer.on("call", (call) => {
       console.log("someone has called");
 
