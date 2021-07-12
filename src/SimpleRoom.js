@@ -33,7 +33,7 @@ class SimpleRoom extends Component {
     this.socket.on("connect", () => {
       this.setState({ MyId: this.socket.id});
       console.log('my id', this.state.MyId);
-      this.setState({MyPeer: new Peer(this.socket.id, { host: "https://my-meet-app.herokuapp.com/" })});
+      this.setState({MyPeer: new Peer(this.socket.id, { host: "my-meet-app.herokuapp.com", secure: true, port: 9000, debug: 3 })});
       console.log('peer - ',this.state.MyPeer.id);
       this.socket.emit("join-room", { roomId: roomId, userName: this.MyName, userId: this.socket.id} ); 
       this.getAllUsers(roomId);
