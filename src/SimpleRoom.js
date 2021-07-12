@@ -115,15 +115,16 @@ class SimpleRoom extends Component {
       if (!this.state.Streams.includes(stream.id)) {
         this.setState({ Streams: [...this.state.Streams, stream.id]})
         this.addMemberVideo(stream, call.peer);
-        console.log("make conn", id);
+        console.log("add member vid called", id);
       }
     })
   };
 
   AcceptConnection = () => {
+    console.log("enter accept conn");
     this.state.MyPeer.on("call", (call) => {
-    
       if (call.metadata.type==="camera") {
+        console.log("enter metadat camera");
         call.answer(this.state.MyStream);
         call.on("stream", (stream) => {
           if (!this.state.Streams.includes(stream.id)) {
