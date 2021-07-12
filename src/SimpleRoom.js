@@ -65,7 +65,15 @@ class SimpleRoom extends Component {
       console.log("soc id", this.socket.id);
       this.setState({ MyId: this.socket.id});
       console.log('my id', this.state.MyId);
-      this.setState({MyPeer: new Peer(this.socket.id, { key:'peerjs', host: "my-meet-app.herokuapp.com", port: 443, path: '/', secure: true, debug: 3 })});
+      this.setState({MyPeer: new Peer(this.socket.id, { host: "my-meet-app.herokuapp.com", port: 443, secure: true, debug: 3, 
+          config: {'iceServers': [
+              { url: 'stun:stun.l.google.com:19302' },
+              { url: 'turn:numb.viagenie.ca:3478', credential: 'muazkh', username:'webrtc@live.com' },
+              { url: 'turn:numb.viagenie.ca', credential: 'muazkh', username:'webrtc@live.com' },
+              { url: 'turn:192.158.29.39:3478?transport=udp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username:'28224511:1379330808' },
+              { url: 'turn:192.158.29.39:3478?transport=tcp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username:'28224511:1379330808' }
+            ]
+          } })});
       //console.log('peer - ',this.state.MyPeer.id); --gives error
       this.socket.emit("join-room", { roomId: roomId, userName: this.MyName, userId: this.socket.id} ); 
       this.getAllUsers(roomId);
@@ -161,9 +169,7 @@ class SimpleRoom extends Component {
           console.log("add member vid called", id);
         }
       })
-    } else {
-        this.MakeConnection();
-    }
+    } 
     
   };
 
@@ -185,9 +191,7 @@ class SimpleRoom extends Component {
             })
           } 
         })  
-    } else {
-      return this.AcceptConnection();
-    }
+    } 
     };
 
   addMyVideo = (stream) => {
