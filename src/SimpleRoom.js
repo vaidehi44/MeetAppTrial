@@ -65,14 +65,14 @@ class SimpleRoom extends Component {
       console.log("soc id", this.socket.id);
       this.setState({ MyId: this.socket.id});
       console.log('my id', this.state.MyId);
-      this.setState({MyPeer: new Peer(this.socket.id, { key: 'peerjs', host: "meetapp-peerjs-server.herokuapp.com/", port: 443, path: '/', secure: true, debug: 3, 
+      this.setState({MyPeer: new Peer(this.socket.id, { host: "meetapp-peerjs-server.herokuapp.com", port: window.location.protocol === 'https:' ? 443 : 9000, secure: true, debug: 3, 
           config: {'iceServers': [
               { 'urls': 'stun:stun.l.google.com:19302' },
               { 'urls': 'turn:numb.viagenie.ca:3478', credential: 'muazkh', username:'webrtc@live.com' },
               { 'urls': 'turn:numb.viagenie.ca', credential: 'muazkh', username:'webrtc@live.com' },
               { 'urls': 'turn:192.158.29.39:3478?transport=udp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username:'28224511:1379330808' },
               { 'urls': 'turn:192.158.29.39:3478?transport=tcp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username:'28224511:1379330808' },
-              { 'urls': ["turn:13.250.13.83:3478?transport=udp"],"username": "YzYNCouZM1mhqhmseWk6","credential": "YzYNCouZM1mhqhmseWk6"}
+              { 'urls': "turn:13.250.13.83:3478?transport=udp","username": "YzYNCouZM1mhqhmseWk6","credential": "YzYNCouZM1mhqhmseWk6"}
             ]
           } })});
       //console.log('peer - ',this.state.MyPeer.id); --gives error
