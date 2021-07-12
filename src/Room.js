@@ -27,6 +27,34 @@ class Room extends Component {
     this.initialVideo = this.props.match.params.video;
     this.initialAudio = this.props.match.params.audio;
     this.sessionTitle = this.props.match.params.session;
+
+    this.config = {'iceServers': [
+                {url:'stun:stun01.sipphone.com'},
+                {url:'stun:stun.ekiga.net'},
+                {url:'stun:stun.fwdnet.net'},
+                {url:'stun:stun.ideasip.com'},
+                {url:'stun:stun.iptel.org'},
+                {url:'stun:stun.rixtelecom.se'},
+                {url:'stun:stun.schlund.de'},
+                {url:'stun:stun.l.google.com:19302'},
+                {url:'stun:stun1.l.google.com:19302'},
+                {url:'stun:stun2.l.google.com:19302'},
+                {url:'stun:stun3.l.google.com:19302'},
+                {url:'stun:stun4.l.google.com:19302'},
+                {url:'stun:stunserver.org'},
+                {url:'stun:stun.softjoys.com'},
+                {url:'stun:stun.voiparound.com'},
+                {url:'stun:stun.voipbuster.com'},
+                {url:'stun:stun.voipstunt.com'},
+                {url:'stun:stun.voxgratia.org'},
+                {url:'stun:stun.xten.com'},
+
+                {
+                  url: 'turn:numb.viagenie.ca',
+                  credential: 'Pass@123',
+                  username: 'vaidehiatpadkar1@gmail.com'
+                  }
+    ]}
 	};
 
   componentDidMount() {
@@ -34,7 +62,7 @@ class Room extends Component {
     this.socket.on("connect", () => {
       this.setState({ MyId: this.socket.id});
       console.log('my id', this.state.MyId);
-      this.setState({MyPeer: new Peer(this.socket.id, { secure: true, host: "https://my-meet-app.herokuapp.com/"})});
+      this.setState({MyPeer: new Peer(this.socket.id, { secure: true, host: "https://my-meet-app.herokuapp.com/", config: this.config})});
       console.log('peer - ',this.state.MyPeer);
       this.socket.emit("join-room", { roomId: roomId, userName: this.MyName, userId: this.socket.id} ); 
       this.getAllUsers(roomId);
