@@ -1,0 +1,71 @@
+
+.chatroom_wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 50px;
+
+}
+.chatroom_wrapper .members_list{
+    width: 25%;
+    background-color: antiquewhite;
+    height: 70vh;
+    border-radius: 6px;
+    padding: 25px;
+    overflow-wrap: break-word;
+    overflow-y: auto;
+}
+
+.chatroom_wrapper .chatroom_chat_form {
+    width: 50%;
+    height: 75vh;
+}
+
+.chatroom_wrapper .chat_log {
+    height: 60vh;
+    width: 100%;
+    background-color: bisque;
+    padding: 18px;
+    border-radius: 6px 6px 0px 0px;
+    overflow-y: auto;
+}
+
+.chatroom_wrapper .chatroom_buttons Button {
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+.chatroom_chat_form .chat_log .chat_input {
+    width: 100%;
+}
+
+.chatroom_chat_form .chat_input input{
+    border: none;
+    border-bottom: 2px solid rgb(164, 170, 170);
+}
+.chatroom_chat_form .chat_input input:focus{
+    outline: none;
+    border: none;
+    transition: none;
+    box-shadow: none;
+    border-bottom: 2px solid rgb(29, 93, 95);
+}
+
+
+.chatroom_chat_form .chat_log .chat-mssg-item {
+    list-style-type: none;
+    background-color: rgb(183, 199, 202);
+    border-radius: 5px;
+    padding: 10px;
+    padding-top:6px;
+    margin: 8px;
+    min-width:180px;
+    width: fit-content;
+    max-width: 85%;
+    overflow-wrap: break-word;
+}
+
+.chatroom_chat_form .chat_log .chat-mssg-item .author {
+    text-align: right;
+    font-size: 14px;
+    font-weight: 500;
+}

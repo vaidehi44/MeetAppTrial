@@ -17,6 +17,10 @@ class Chat extends Component {
         if (prevProps.message !== this.props.message) {
             this.renderMessage(this.props.message);
         }
+
+        if (prevProps.ChatroomMssgs !== this.props.ChatroomMssgs) {
+            this.renderChatRoomMssg(this.props.ChatroomMssgs);
+        }
     };
 
     renderMessage = (message) => {
@@ -39,6 +43,21 @@ class Chat extends Component {
             li.appendChild(div1);
             li.appendChild(div2);
             log.appendChild(li);
+        }
+    }
+
+    renderChatRoomMssg = (array) => {
+
+        if (array.length>0) {
+
+            for (let i=0; i<array.length; i++) {
+                const object = {
+                    "userName": array[i].author,
+                    "message": array[i].message
+                }
+                console.log("rendering");
+                this.renderMessage(object);
+            }
         }
     }
 
@@ -71,12 +90,18 @@ class Chat extends Component {
 
     render() {
 
-        const { message, sendMessage } = this.props;
+        const { message, sendMessage, ChatroomMssgs } = this.props;
 
         return(
 
             <>
                 <div className='chat_form'>
+
+                    <div className="chat_log" id="chat_log">
+                        <ul className="list-group" id="chat-log">
+                        </ul>
+                    </div>
+
                     <form onSubmit={this.handleSubmit} autoComplete="off">
                         <input type="text" 
                             class="form-control" 
@@ -87,11 +112,6 @@ class Chat extends Component {
                             value={this.state.inputMessage}>
                         </input>
                     </form>
-
-                    <div className="chat_log" id="chat_log">
-                        <ul className="list-group" id="chat-log">
-                        </ul>
-                    </div>
                 </div>
                 
 

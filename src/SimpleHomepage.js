@@ -13,8 +13,6 @@ class SimpleHomepage extends Component {
 		this.state = {
             showModalOne: false,
             showModalTwo: false,
-            videoStream: false,
-            audioStream: false,
             sessionTitle: "Untitled Session",
             name: ""
 		}
@@ -31,13 +29,6 @@ class SimpleHomepage extends Component {
     closeModalTwo = () => this.setState({showModalTwo: false});
 
 
-    handleVideo = (e) => {
-        this.setState({ videoStream: e.target.checked })
-      }
-    handleAudio = (e) => {
-        this.setState({ audioStream: e.target.checked })
-    }
-
     setTitle = (e) => {
         this.setState({ sessionTitle: e.target.value });
     }
@@ -48,7 +39,7 @@ class SimpleHomepage extends Component {
 
     render() {
         const roomId = uuidv4();
-        const { name, videoStream, audioStream, sessionTitle } = this.state;
+        const { name, sessionTitle } = this.state;
         return(
             <>
                 <Navbar />
@@ -72,9 +63,8 @@ class SimpleHomepage extends Component {
                         
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={() => this.openModalTwo()}>
-                            Generate Link
-                        </Button>
+                        <Button onClick={this.openModalTwo}>Generate Link</Button>
+
                         <Button onClick={this.closeModalOne}>Cancel</Button>
                     </Modal.Footer>
                 </Modal>
@@ -86,28 +76,18 @@ class SimpleHomepage extends Component {
                     <Modal.Body>
                         <div>
                             <h5>{name},</h5>
-                            Your link is - <span>http://localhost:5000/{roomId}/{sessionTitle}</span>
-                        </div>
-                        <div>Please allow browser to access your video and audio streams and select your initial video and audio preferences -</div>
-                        <label className="switch">
-                            <input type="checkbox" onChange = { this.handleVideo }></input>
-                            <span className="slider round"></span>
-                            <span className='streamLabel'>Video</span>
-                        </label>
-                        <label className="switch">
-                            <input type="checkbox" onChange = { this.handleAudio }></input>
-                            <span className="slider round"></span>
-                            <span className='streamLabel'>Audio</span>
-                        </label>                      
+                            Your link is - <span>/{roomId}/{sessionTitle}</span>
+                        </div>                   
                     </Modal.Body>
                     <Modal.Footer>
                         <Button>Copy Link</Button>
                         <Button>
-                            <Link to={"/"+roomId+"/"+sessionTitle+"/"+name+"/"+videoStream.toString()+"/"+audioStream.toString()}>Enter the Room</Link>
+                            <Link to={"/"+roomId+"/"+sessionTitle+"/"+name}>Enter the Room</Link>
                         </Button>
                        
                     </Modal.Footer>
                 </Modal>
+
             </>
            
         )

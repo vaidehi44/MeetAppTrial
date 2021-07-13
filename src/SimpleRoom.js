@@ -1,4 +1,4 @@
-import React, { Component, useCallback } from 'react';
+import React, { Component } from 'react';
 import { io } from 'socket.io-client';
 import Chat from "./Chat";
 import Notebook from "./Notebook";
@@ -9,7 +9,7 @@ import "./room.css";
 const real = "https://my-meet-app.herokuapp.com/";
 const local = "http://localhost:5000";
 
-
+//check this
 class SimpleRoom extends Component {
   constructor(props) {
 		super(props);
@@ -21,7 +21,8 @@ class SimpleRoom extends Component {
           Streams: [],
           ScreenShared: { "bool": false, "stream": null},
           NewMessage: null,
-          MyNotes: ""
+          MyNotes: "",
+          ChatroomMssgs: []
 		};
     this.socket = io("https://my-meet-app.herokuapp.com/");
     this.roomId = this.props.match.params.id;
@@ -30,33 +31,6 @@ class SimpleRoom extends Component {
     this.initialAudio = this.props.match.params.audio;
     this.sessionTitle = this.props.match.params.session;
 
-    this.config = {'iceServers': [
-      {url:'stun:stun01.sipphone.com'},
-      {url:'stun:stun.ekiga.net'},
-      {url:'stun:stun.fwdnet.net'},
-      {url:'stun:stun.ideasip.com'},
-      {url:'stun:stun.iptel.org'},
-      {url:'stun:stun.rixtelecom.se'},
-      {url:'stun:stun.schlund.de'},
-      {url:'stun:stun.l.google.com:19302'},
-      {url:'stun:stun1.l.google.com:19302'},
-      {url:'stun:stun2.l.google.com:19302'},
-      {url:'stun:stun3.l.google.com:19302'},
-      {url:'stun:stun4.l.google.com:19302'},
-      {url:'stun:stunserver.org'},
-      {url:'stun:stun.softjoys.com'},
-      {url:'stun:stun.voiparound.com'},
-      {url:'stun:stun.voipbuster.com'},
-      {url:'stun:stun.voipstunt.com'},
-      {url:'stun:stun.voxgratia.org'},
-      {url:'stun:stun.xten.com'},
-
-      {
-        url: 'turn:numb.viagenie.ca',
-        credential: 'Pass@123',
-        username: 'vaidehiatpadkar1@gmail.com'
-        }
-    ]}
 	};
 
   componentDidMount() {
@@ -65,6 +39,9 @@ class SimpleRoom extends Component {
       console.log("soc id", this.socket.id);
       this.setState({ MyId: this.socket.id});
       console.log('my id', this.state.MyId);
+     this.getChatroomMessages();
+     /*this.setState({MyPeer: new Peer(this.socket.id)});*/
+
       this.setState({MyPeer: new Peer(this.socket.id, { host: "meetapp-peerjs-server.herokuapp.com", port: window.location.protocol === 'https:' ? 443 : 9000, secure: true, debug: 3, 
           config: {'iceServers': [
               { 'urls': 'stun:stun.l.google.com:19302' },
@@ -75,7 +52,6 @@ class SimpleRoom extends Component {
               { 'urls': "turn:13.250.13.83:3478?transport=udp","username": "YzYNCouZM1mhqhmseWk6","credential": "YzYNCouZM1mhqhmseWk6"}
             ]
           } })});
-      //console.log('peer - ',this.state.MyPeer.id); --gives error
       this.socket.emit("join-room", { roomId: roomId, userName: this.MyName, userId: this.socket.id} ); 
       this.getAllUsers(roomId);
       this.AcceptConnection();
@@ -114,10 +90,17 @@ class SimpleRoom extends Component {
     this.socket.on("chat-mssg", (mssg, userName) => {
       this.setState({ NewMessage: { "message": mssg , "userName": userName } });
       console.log("new mssg", this.state.NewMessage);
-    })
+    });
+
+     this.socket.on("all-chatroom-mssg", (array) => {
+      this.setState({ChatroomMssgs: array});
+    });
 
   };
 
+  getChatroomMessages = () => {
+    this.socket.emit("get-chatroom-mssg", this.roomId)
+  };
 
   getMyStream = () => {
     navigator.mediaDevices.getUserMedia({'video':true, 'audio': true})
@@ -373,10 +356,7 @@ class SimpleRoom extends Component {
     const roomId = this.roomId;
     const MyName = this.MyName;
     const sessionTitle = this.sessionTitle;
-    const { Users } = this.state;
-    const { MyId } = this.state;
-    const { MyStream } = this.state;
-    const { NewMessage } = this.state;
+    const { ChatroomMssgs, MyId, MyStream, NewMessage, Users } = this.state;
 
     return(
       <>
@@ -420,7 +400,7 @@ class SimpleRoom extends Component {
                     </div>
                   </div>
                   <div class="tab-pane fade" id="pills-chat" role="tabpanel" aria-labelledby="pills-chat-tab">
-                    <Chat author={this.MyName} message={NewMessage} sendMessage={this.sendMessage} />
+                    <Chat author={this.MyName} message={NewMessage} sendMessage={this.sendMessage} ChatroomMssgs={ChatroomMssgs}/>
                   </div>
                   <div class="tab-pane fade" id="pills-notebook" role="tabpanel" aria-labelledby="pills-notebook-tab">
                     <Notebook getNotes={this.getNotes}/>
