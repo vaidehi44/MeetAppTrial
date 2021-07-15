@@ -21,10 +21,11 @@ class SimpleRoom extends Component {
           Streams: [],
           ScreenShared: { "bool": false, "stream": null},
           NewMessage: null,
-          MyNotes: "",
+          MyNotes: [],
           ChatroomMssgs: []
 		};
-    this.socket = io("https://my-meet-app.herokuapp.com/");
+
+    this.socket = io(real);
     this.roomId = this.props.match.params.id;
     this.MyName = this.props.match.params.name;
     this.initialVideo = this.props.match.params.video;
@@ -36,12 +37,9 @@ class SimpleRoom extends Component {
   componentDidMount() {
     const roomId = this.roomId;
     this.socket.on("connect", () => {
-      console.log("soc id", this.socket.id);
       this.setState({ MyId: this.socket.id});
-      console.log('my id', this.state.MyId);
-     this.getChatroomMessages();
-     /*this.setState({MyPeer: new Peer(this.socket.id)});*/
-
+      this.getChatroomMessages();
+      /*this.setState({MyPeer: new Peer(this.socket.id)});*/
       this.setState({MyPeer: new Peer(this.socket.id, { host: "meetapp-peerjs-server.herokuapp.com", port: window.location.protocol === 'https:' ? 443 : 9000, secure: true, debug: 3, 
           config: {'iceServers': [
               { 'urls': 'stun:stun.l.google.com:19302' },
@@ -51,19 +49,11 @@ class SimpleRoom extends Component {
               { 'urls': 'turn:192.158.29.39:3478?transport=tcp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username:'28224511:1379330808' },
               { 'urls': "turn:13.250.13.83:3478?transport=udp","username": "YzYNCouZM1mhqhmseWk6","credential": "YzYNCouZM1mhqhmseWk6"}
             ]
-          } })});
+          }})});
       this.socket.emit("join-room", { roomId: roomId, userName: this.MyName, userId: this.socket.id} ); 
       this.getAllUsers(roomId);
       this.AcceptConnection();
     });
-
-    if (this.state.MyPeer!==null) {
-      console.log("mypeer", this.state.MyPeer);
-      this.state.MyPeer.on('error', (err) => {
-        console.log('peer connection error', err);
-        this.state.MyPeer.reconnect();
-      });
-    }
     
     this.getMyStream();
 
@@ -89,12 +79,19 @@ class SimpleRoom extends Component {
 
     this.socket.on("chat-mssg", (mssg, userName) => {
       this.setState({ NewMessage: { "message": mssg , "userName": userName } });
-      console.log("new mssg", this.state.NewMessage);
+      //console.log("new mssg", this.state.NewMessage);
     });
 
-     this.socket.on("all-chatroom-mssg", (array) => {
+    this.socket.on("all-chatroom-mssg", (array) => {
       this.setState({ChatroomMssgs: array});
     });
+
+    if (this.state.MyPeer!==null) {
+      this.state.MyPeer.on("disconnected", () => {
+        console.log("trying to reconnect peer");
+        this.state.MyPeer.reconnect();
+      })
+    };
 
   };
 
@@ -142,40 +139,32 @@ class SimpleRoom extends Component {
   };
 
   MakeConnection = (id) => {
-    console.log("make conn", id);
     if (this.state.MyPeer!==null){
       var call = this.state.MyPeer.call(id, this.state.MyStream, {metadata: { "type" : "camera"}});
-      console.log("call", call)
       call.on("stream", (stream) => {
         if (!this.state.Streams.includes(stream.id)) {
           this.setState({ Streams: [...this.state.Streams, stream.id]})
           this.addMemberVideo(stream, call.peer);
-          console.log("add member vid called", id);
+          //console.log("added member vid called", id);
         }
       })
     } 
-    
   };
 
   AcceptConnection = () => {
-    console.log("enter accept conn", this.state.MyPeer);
     if (this.state.MyPeer!==null) {
-      this.state.MyPeer.on("call", (call) => {
-        console.log("someone has called", call);
-  
+      this.state.MyPeer.on("call", (call) => {  
         if (call.metadata.type==="camera") {
-          console.log("enter metadata camera");
           call.answer(this.state.MyStream);
           call.on("stream", (stream) => {
             if (!this.state.Streams.includes(stream.id)) {
               this.setState({ Streams: [...this.state.Streams, stream.id]})
               this.addMemberVideo(stream, call.peer);
-              console.log("accepted connection");
               }
             })
           } 
         })  
-    } 
+      } 
     };
 
   addMyVideo = (stream) => {
@@ -222,14 +211,14 @@ class SimpleRoom extends Component {
   myVideoControl = (stream) => {
     if(stream!=null){
       stream.getVideoTracks()[0].enabled = !(stream.getVideoTracks()[0].enabled);
-      console.log("stream set", typeof(stream.getVideoTracks()[0]))
+      //console.log("stream set", typeof(stream.getVideoTracks()[0]))
     }
   };
 
   myAudioControl = (stream) => {
     if(stream!=null){
       stream.getAudioTracks()[0].enabled = !(stream.getAudioTracks()[0].enabled);
-      console.log("stream set", stream.getAudioTracks()[0])
+      //console.log("stream set", stream.getAudioTracks()[0])
     }
   };
 
@@ -318,7 +307,7 @@ class SimpleRoom extends Component {
 
   getNotes = (notes) => {
     const array = notes.split('\n');
-    this.setState({ MyNotes: notes })
+    this.setState({ MyNotes: array })
   }
 
   sidebarToggle = () => {
@@ -341,14 +330,12 @@ class SimpleRoom extends Component {
     const toggle_btn = document.getElementById('streamToggle');
     stream.classList.toggle('streamHide');
     toggle_btn.classList.toggle('collapsed');
-    /**/ 
     const members = document.getElementById('membersContainer');
     const chat_log = document.getElementById('chat_log');
     const notebook = document.getElementById('notes_page');
     members.classList.toggle('expand');
     chat_log.classList.toggle('expand');
     notebook.classList.toggle('expand');
-
   }
   
 

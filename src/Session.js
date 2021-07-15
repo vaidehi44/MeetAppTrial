@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Navbar from './Navbar';
 import './session.css'
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -102,7 +103,8 @@ class Session extends Component {
 
         return(
             <>
-                <h2>Your Sessions - </h2>
+                <Navbar />
+                <h3>Your Sessions - </h3>
                 <div className="accordion-container d-flex justify-content-center">
                     <Rows data={sessions} />
 

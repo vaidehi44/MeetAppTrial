@@ -58,8 +58,10 @@ class SimpleHomepage extends Component {
                         <Modal.Title>Create a Room</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <h5>Join as - <input type='text' placeholder="Your name" value={name} onChange={this.setName} autoComplete="off"></input></h5>
-                        <h5>Session Title - <input type="text" id="session-title-input" value={sessionTitle} onChange={ this.setTitle } placeholder="(optional)" autoComplete="off"></input></h5>
+                        <h4>Hello User</h4>,
+                        <h5>Please enter the following details to create a new chatroom</h5>
+                        <h4>Join as - <input type='text' placeholder="Your name" value={name} onChange={this.setName} autoComplete="off"></input></h4>
+                        <h4>Session Title - <input type="text" id="session-title-input" value={sessionTitle} onChange={ this.setTitle } placeholder="(optional)" autoComplete="off"></input></h4>
                         
                     </Modal.Body>
                     <Modal.Footer>
@@ -75,8 +77,11 @@ class SimpleHomepage extends Component {
                     </Modal.Header>
                     <Modal.Body>
                         <div>
-                            <h5>{name},</h5>
-                            Your link is - <span>/{roomId}/{sessionTitle}</span>
+                            <h4>{name},</h4>
+                            <h6>
+                                Your link is - <br></br>
+                                <strong style={{color: '#3965bd'}}>my-meetapp.netlify.app/{roomId}/{sessionTitle}</strong>
+                            </h6>
                         </div>                   
                     </Modal.Body>
                     <Modal.Footer>

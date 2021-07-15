@@ -20,14 +20,12 @@ class ChatRoom extends Component {
           videoStream: false,
           audioStream: false,
           ChatroomMssgs: []
-
 		};
-        this.socket = io("https://my-meet-app.herokuapp.com/");
-        //this.MyName = localStorage.getItem('meetapp-username');//
-        this.MyName = this.props.match.params.name;
+
+        this.socket = io("https://my-meet-app.herokuapp.com");
         this.roomId = this.props.match.params.id;
-        //this.MyDbId = localStorage.getItem('meetapp-dbId');
         this.sessionTitle = this.props.match.params.session;
+        this.MyName = this.props.match.params.name;        
 
     }
 
@@ -37,7 +35,6 @@ class ChatRoom extends Component {
           this.setState({ MyId: this.socket.id});
           console.log('my id', this.state.MyId);
           this.getChatroomMessages();
-          //console.log('peer - ',this.state.MyPeer.id); --gives error
           this.socket.emit("join-chat-room", { roomId: roomId, userName: this.MyName, userId: this.socket.id} ); 
           this.getAllUsers(roomId);
         });
@@ -56,13 +53,13 @@ class ChatRoom extends Component {
 
         this.socket.on("chat-mssg", (mssg, userName) => {
             this.setState({ NewMessage: { "message": mssg , "userName": userName } });
-            console.log("new mssg", this.state.NewMessage);
+            //console.log("new mssg", this.state.NewMessage);
         });
 
         this.socket.on("all-chatroom-mssg", (array) => {
             if (array!==null && array!==undefined) {
                 this.setState({ChatroomMssgs: array});
-                console.log("works", this.state.ChatroomMssgs);
+                //console.log("works", this.state.ChatroomMssgs);
             }
             
         });
@@ -89,8 +86,7 @@ class ChatRoom extends Component {
     };
 
     renderMessage = (message) => {
-        //const { messages } = this.props;
-        //for (let i=0; i<messages.length; i++) {
+
         if (message !== null ){
             const log = document.getElementById("chat-log");
             const mssg = message.message;
@@ -109,7 +105,7 @@ class ChatRoom extends Component {
             li.appendChild(div2);
             log.appendChild(li);
         }
-    }
+    };
 
     renderChatRoomMssg = (array) => {
 

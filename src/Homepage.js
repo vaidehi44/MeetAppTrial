@@ -67,7 +67,10 @@ class Homepage extends Component {
                         <Modal.Title>Create a Room</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <h5>Session Title - <input type="text" id="session-title-input" value={sessionTitle} onChange={ this.setTitle } placeholder="(optional)" autoComplete="off"></input></h5>
+                        <h4>Hi <strong>{name}</strong>,</h4>
+                        <h5>Please enter a name for your session/call -</h5>
+                        <br></br>
+                        <h4>Session Title - <span><input type="text" id="session-title-input" value={sessionTitle} onChange={ this.setTitle } placeholder="(optional)" autoComplete="off"></input></span></h4>
                         
                     </Modal.Body>
                     <Modal.Footer>
@@ -84,25 +87,18 @@ class Homepage extends Component {
                     </Modal.Header>
                     <Modal.Body>
                         <div>
-                            <h5>{name},</h5>
-                            Your link is - <span>http://localhost:5000/{roomId}/{sessionTitle}</span>
+                            <h4>{name},</h4>
+                            <h6>
+                                Your link is - <br></br>
+                                <strong style={{color: '#3965bd'}}>my-meetapp.netlify.app/{roomId}/{sessionTitle}</strong>
+                            </h6>
                         </div>
-                        <div>Please allow browser to access your video and audio streams and select your initial video and audio preferences -</div>
-                        <label className="switch">
-                            <input type="checkbox" onChange = { this.handleVideo }></input>
-                            <span className="slider round"></span>
-                            <span className='streamLabel'>Video</span>
-                        </label>
-                        <label className="switch">
-                            <input type="checkbox" onChange = { this.handleAudio }></input>
-                            <span className="slider round"></span>
-                            <span className='streamLabel'>Audio</span>
-                        </label>                      
+                                              
                     </Modal.Body>
                     <Modal.Footer>
                         <Button>Copy Link</Button>
                         <Button>
-                            <Link to={"/"+roomId+"/"+sessionTitle+"/"+name+"/"+videoStream.toString()+"/"+audioStream.toString()}>Enter the Room</Link>
+                            <Link to={"/"+roomId+"/"+sessionTitle+"/"+name}>Enter the Room</Link>
                         </Button>
                        
                     </Modal.Footer>
