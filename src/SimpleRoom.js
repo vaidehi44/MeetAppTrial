@@ -52,7 +52,6 @@ class SimpleRoom extends Component {
           }})});
       this.socket.emit("join-room", { roomId: roomId, userName: this.MyName, userId: this.socket.id} ); 
       this.getAllUsers(roomId);
-      this.AcceptConnection();
     });
     
     this.getMyStream();
@@ -135,7 +134,6 @@ class SimpleRoom extends Component {
   HandleNewConn = (roomId, userId) => {
       this.getAllUsers(roomId);
       this.MakeConnection(userId);
-      this.AcceptConnection();
   };
 
   MakeConnection = (id) => {
@@ -145,7 +143,7 @@ class SimpleRoom extends Component {
         if (!this.state.Streams.includes(stream.id)) {
           this.setState({ Streams: [...this.state.Streams, stream.id]})
           this.addMemberVideo(stream, call.peer);
-          //console.log("added member vid called", id);
+          console.log("received stream from make conn", id);
         }
       })
     } 
@@ -160,6 +158,7 @@ class SimpleRoom extends Component {
             if (!this.state.Streams.includes(stream.id)) {
               this.setState({ Streams: [...this.state.Streams, stream.id]})
               this.addMemberVideo(stream, call.peer);
+              console.log("received stream from accept conn")
               }
             })
           } 
